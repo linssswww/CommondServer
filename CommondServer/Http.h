@@ -29,7 +29,13 @@ namespace myHttp
 		void BuildWinSocket();
 		void CloseWinSocket();
 		void Recv();
+
 		void Send();
+	};
+	class LinuxSocket
+	{
+		LinuxSocket();
+		virtual ~LinuxSocket();
 	};
 	class TcpServer:public WinSocket
 	{
