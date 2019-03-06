@@ -33,12 +33,33 @@ void mySocket::BaseWinSocket::Select()
 		throw std::logic_error("SOCKET_ERROR");
 }
 
-void mySocket::BaseWinSocket::Accept()
+void mySocket::BaseWinSocket::Accept(int i)
 {
+	SOCKADDR_IN clntAddr;
+	SOCKET ClntSock;
+	if(FD_ISSET(read.fd_array[i], &cp_read))
+	{
+		if (read.fd_array[i] == ServSock)
+		{
+			int adr_sz = sizeof(clntAddr);
+			ClntSock = accept(ServSock, (SOCKADDR*)&servAddr, &adr_sz);
+			FD_SET(ClntSock, &read);
+		}
+	}
 }
 
-void mySocket::BaseWinSocket::Recv()
+void mySocket::BaseWinSocket::Recv(int i)
 {
+	char buf[1024];
+    #define BUF_SIZE 1024
+	if (FD_ISSET(read.fd_array[i], &cp_read))
+	{
+		if(read.fd_array[i] != ServSock)
+		{
+			int str_len = recv(read.fd_array[i], buf, BUF_SIZE - 1, 0);
+		}
+	}
+	
 }
 
 void mySocket::BaseWinSocket::Send()

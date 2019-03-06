@@ -13,8 +13,8 @@ namespace mySocket
 		virtual ~BaseWinSocket();
 		void BuildWinSocket(std::string ip, int port);
 		void CloseWinSocket();
-		void Accept();
-		void Recv();
+		void Accept(int i);
+		void Recv(int i);
 		void Send();
 
 	private:
