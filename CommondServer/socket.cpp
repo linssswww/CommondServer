@@ -33,6 +33,28 @@ void mySocket::BaseWinSocket::Select()
 		throw std::logic_error("SOCKET_ERROR");
 }
 
+void mySocket::BaseWinSocket::ThreadRun()
+{
+	while (1)
+	{
+		ReSetReadFileDescribes();
+		Select();
+		if(fd_num > 0)
+		{
+			for(int i = 0; i < read.fd_count; i++)
+			{
+				Accept(i);
+				Recv(i);
+			}
+		}
+	}
+}
+
+void mySocket::BaseWinSocket::ReSetReadFileDescribes()
+{
+	cp_read = read;
+}
+
 void mySocket::BaseWinSocket::Accept(int i)
 {
 	SOCKADDR_IN clntAddr;
@@ -57,6 +79,12 @@ void mySocket::BaseWinSocket::Recv(int i)
 		if(read.fd_array[i] != ServSock)
 		{
 			int str_len = recv(read.fd_array[i], buf, BUF_SIZE - 1, 0);
+			if (str_len < 0)
+			{
+				closesocket(read.fd_array[i]);
+				FD_CLR(read.fd_array[i], &read);
+			}
+				
 		}
 	}
 	

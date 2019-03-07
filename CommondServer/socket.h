@@ -3,9 +3,20 @@
 #include <stdlib.h>
 #include <string>
 #include <winsock2.h>
-
+#include <queue>
 namespace mySocket
 {
+	class MessageAllocator
+	{
+	public:
+		MessageAllocator();
+		~MessageAllocator();
+		void AddMessageQueue(std::string mess);
+		void CalMessagePriority(std::string mess);
+		std::string ConsumeMessageFromQueue();
+	private:
+		std::queue<std::string> que; //当在线数据到一定的层度
+	};
 	class BaseWinSocket
 	{
 	public:
@@ -23,7 +34,8 @@ namespace mySocket
 		void Listen();
 		void HandleSocketSet();
 		void Select();
-		
+		void ReSetReadFileDescribes();
+		void ThreadRun();
 		/*
 		select 整体使用思路
 		1、select 判断是否有触发 fd_num =0 没有信号。 如果》0 有信号
